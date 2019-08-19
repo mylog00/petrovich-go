@@ -7,23 +7,23 @@ import (
 
 func TestRule(t *testing.T) {
 	rulesFile := readFile("./rules.yml")
-	rules := LoadRules(rulesFile)
-	actual, err := rules.LastName("Дубовицкая", Female, Nominative)
+	petrovich := LoadFromFile(rulesFile)
+	actual, err := petrovich.LastName("Дубовицкая", Female, Nominative)
 	examineAnswer("Дубовицкая", actual, err, t)
 
-	actual, err = rules.LastName("Дубовицкая", Female, Genitive)
+	actual, err = petrovich.LastName("Дубовицкая", Female, Genitive)
 	examineAnswer("Дубовицкой", actual, err, t)
 
-	actual, err = rules.LastName("Дубовицкая", Female, Dative)
+	actual, err = petrovich.LastName("Дубовицкая", Female, Dative)
 	examineAnswer("Дубовицкой", actual, err, t)
 
-	actual, err = rules.LastName("Дубовицкая", Female, Accusative)
+	actual, err = petrovich.LastName("Дубовицкая", Female, Accusative)
 	examineAnswer("Дубовицкую", actual, err, t)
 
-	actual, err = rules.LastName("Дубовицкая", Female, Instrumental)
+	actual, err = petrovich.LastName("Дубовицкая", Female, Instrumental)
 	examineAnswer("Дубовицкой", actual, err, t)
 
-	actual, err = rules.LastName("Дубовицкая", Female, Prepositional)
+	actual, err = petrovich.LastName("Дубовицкая", Female, Prepositional)
 	examineAnswer("Дубовицкой", actual, err, t)
 }
 

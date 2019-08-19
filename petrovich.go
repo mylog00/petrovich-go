@@ -33,8 +33,8 @@ const (
 	Prepositional = "prepositional"
 )
 
-//Rules TODO
-type Rules struct {
+//Petrovich TODO
+type Petrovich struct {
 	Lastname   ruleGroup
 	Firstname  ruleGroup
 	Middlename ruleGroup
@@ -60,28 +60,28 @@ func (e ErrPetrovich) Error() string {
 }
 
 // FirstName TODO
-func (rules Rules) FirstName(firstName string, gender string, caseName string) (string, error) {
-	return convertTo(firstName, gender, caseName, &rules.Firstname)
+func (petrovich Petrovich) FirstName(firstName string, gender string, caseName string) (string, error) {
+	return convertTo(firstName, gender, caseName, &petrovich.Firstname)
 }
 
 // LastName TODO
-func (rules Rules) LastName(lastName string, gender string, caseName string) (string, error) {
-	return convertTo(lastName, gender, caseName, &rules.Lastname)
+func (petrovich Petrovich) LastName(lastName string, gender string, caseName string) (string, error) {
+	return convertTo(lastName, gender, caseName, &petrovich.Lastname)
 }
 
 // MiddleName TODO
-func (rules Rules) MiddleName(middleName string, gender string, caseName string) (string, error) {
-	return convertTo(middleName, gender, caseName, &rules.Middlename)
+func (petrovich Petrovich) MiddleName(middleName string, gender string, caseName string) (string, error) {
+	return convertTo(middleName, gender, caseName, &petrovich.Middlename)
 }
 
-//LoadRules TODO
-func LoadRules(data []byte) Rules {
-	t := Rules{}
-	err := yaml.Unmarshal(data, &t)
+//LoadFromFile TODO
+func LoadFromFile(data []byte) Petrovich {
+	p := Petrovich{}
+	err := yaml.Unmarshal(data, &p)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
-	return t
+	return p
 }
 
 func convertTo(name string, gender string, caseName string, ruleGroup *ruleGroup) (string, error) {
