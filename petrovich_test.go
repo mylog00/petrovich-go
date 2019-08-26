@@ -5,9 +5,10 @@ import (
 	"testing"
 )
 
-func TestRule(t *testing.T) {
-	rulesFile := readFile("./rules.yml")
-	petrovich := LoadFromFile(rulesFile)
+var rulesBytes = readFile("petrovich-rules/rules.yml")
+
+func TestLastname(t *testing.T) {
+	petrovich := LoadFromFile(rulesBytes)
 	actual, err := petrovich.LastName("Дубовицкая", Female, Nominative)
 	examineAnswer("Дубовицкая", actual, err, t)
 
@@ -27,12 +28,57 @@ func TestRule(t *testing.T) {
 	examineAnswer("Дубовицкой", actual, err, t)
 }
 
+func TestFirstnameException(t *testing.T) {
+	petrovich := LoadFromFile(rulesBytes)
+	firstname := "Пётр"
+
+	actual, err := petrovich.FirstName(firstname, Male, Nominative)
+	examineAnswer("Пётр", actual, err, t)
+
+	actual, err = petrovich.FirstName(firstname, Male, Genitive)
+	examineAnswer("Петра", actual, err, t)
+
+	actual, err = petrovich.FirstName(firstname, Male, Dative)
+	examineAnswer("Петру", actual, err, t)
+
+	actual, err = petrovich.FirstName(firstname, Male, Accusative)
+	examineAnswer("Петра", actual, err, t)
+
+	actual, err = petrovich.FirstName(firstname, Male, Instrumental)
+	examineAnswer("Петром", actual, err, t)
+
+	actual, err = petrovich.FirstName(firstname, Male, Prepositional)
+	examineAnswer("Петре", actual, err, t)
+}
+
+func TestDoubleLastname(t *testing.T) {
+	petrovich := LoadFromFile(rulesBytes)
+	lastname := "Салтыков-Щедрин"
+
+	actual, err := petrovich.LastName(lastname, Male, Nominative)
+	examineAnswer("Салтыков-Щедрин", actual, err, t)
+
+	actual, err = petrovich.LastName(lastname, Male, Genitive)
+	examineAnswer("Салтыкова-Щедрина", actual, err, t)
+
+	actual, err = petrovich.LastName(lastname, Male, Dative)
+	examineAnswer("Салтыкову-Щедрину", actual, err, t)
+
+	actual, err = petrovich.LastName(lastname, Male, Accusative)
+	examineAnswer("Салтыкова-Щедрина", actual, err, t)
+
+	actual, err = petrovich.LastName(lastname, Male, Instrumental)
+	examineAnswer("Салтыковым-Щедриным", actual, err, t)
+
+	actual, err = petrovich.LastName(lastname, Male, Prepositional)
+	examineAnswer("Салтыкове-Щедрине", actual, err, t)
+}
 func examineAnswer(expected string, actual string, err error, t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
 	if actual != expected {
-		t.Errorf("Wrong answer expected='%s', actual='%s'", actual, expected)
+		t.Errorf("Wrong answer expected='%s', actual='%s'", expected, actual)
 	}
 }
 func readFile(fileName string) []byte {
