@@ -19,17 +19,17 @@ const (
 )
 
 const (
-	//Nominative case constant
+	//Nominative case constant (именительный)
 	Nominative = "nominative"
-	//Genitive case constant
+	//Genitive case constant (родительный)
 	Genitive = "genitive"
-	//Dative case constant
+	//Dative case constant (дательный)
 	Dative = "dative"
-	//Accusative case constant
+	//Accusative case constant (винительный)
 	Accusative = "accusative"
-	//Instrumental case constant
+	//Instrumental case constant (творительный)
 	Instrumental = "instrumental"
-	//Prepositional case constant
+	//Prepositional case constant (предложный)
 	Prepositional = "prepositional"
 )
 
@@ -74,7 +74,7 @@ func (petrovich Petrovich) MiddleName(middleName string, gender string, caseName
 	return convertTo(middleName, gender, caseName, &petrovich.Middlename)
 }
 
-//LoadFromFile TODO
+//LoadFromFile load rules from file
 func LoadFromFile(data []byte) Petrovich {
 	p := Petrovich{}
 	err := yaml.Unmarshal(data, &p)
@@ -85,7 +85,11 @@ func LoadFromFile(data []byte) Petrovich {
 }
 
 func convertTo(name string, gender string, caseName string, ruleGroup *ruleGroup) (string, error) {
-	return findAndApply(name, gender, caseName, ruleGroup)
+	parts := strings.SplitN(name, "-", 2)
+	for i, part := range parts {
+		parts[i], _ = findAndApply(part, gender, caseName, ruleGroup)
+	}
+	return strings.Join(parts, "-"), nil
 }
 
 func findAndApply(name string, gender string, caseName string, ruleGroup *ruleGroup) (string, error) {
@@ -94,7 +98,7 @@ func findAndApply(name string, gender string, caseName string, ruleGroup *ruleGr
 		rule, err = findRule(name, gender, ruleGroup.Suffixes)
 	}
 	if err != nil {
-		return "", err
+		return name, err
 	}
 	return apply(name, caseName, &rule)
 }
