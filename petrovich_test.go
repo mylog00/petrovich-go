@@ -9,77 +9,104 @@ var rulesBytes = readFile("petrovich-rules/rules.yml")
 
 func TestLastname(t *testing.T) {
 	petrovich := LoadFromFile(rulesBytes)
-	actual, err := petrovich.LastName("Дубовицкая", Female, Nominative)
-	examineAnswer("Дубовицкая", actual, err, t)
+	test := testCase{"Дубовицкая", "Дубовицкая", Female, Nominative}
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName("Дубовицкая", Female, Genitive)
-	examineAnswer("Дубовицкой", actual, err, t)
+	test.expected = "Дубовицкой"
+	test.caseName = Genitive
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName("Дубовицкая", Female, Dative)
-	examineAnswer("Дубовицкой", actual, err, t)
+	test.expected = "Дубовицкой"
+	test.caseName = Dative
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName("Дубовицкая", Female, Accusative)
-	examineAnswer("Дубовицкую", actual, err, t)
+	test.expected = "Дубовицкую"
+	test.caseName = Accusative
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName("Дубовицкая", Female, Instrumental)
-	examineAnswer("Дубовицкой", actual, err, t)
+	test.expected = "Дубовицкой"
+	test.caseName = Instrumental
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName("Дубовицкая", Female, Prepositional)
-	examineAnswer("Дубовицкой", actual, err, t)
+	test.expected = "Дубовицкой"
+	test.caseName = Prepositional
+	examineLastname(petrovich, test, t)
 }
 
 func TestFirstnameException(t *testing.T) {
 	petrovich := LoadFromFile(rulesBytes)
-	firstname := "Пётр"
+	test := testCase{"Пётр", "Пётр", Male, Nominative}
+	examineFirstname(petrovich, test, t)
 
-	actual, err := petrovich.FirstName(firstname, Male, Nominative)
-	examineAnswer("Пётр", actual, err, t)
+	test.expected = "Петра"
+	test.caseName = Genitive
+	examineFirstname(petrovich, test, t)
 
-	actual, err = petrovich.FirstName(firstname, Male, Genitive)
-	examineAnswer("Петра", actual, err, t)
+	test.expected = "Петру"
+	test.caseName = Dative
+	examineFirstname(petrovich, test, t)
 
-	actual, err = petrovich.FirstName(firstname, Male, Dative)
-	examineAnswer("Петру", actual, err, t)
+	test.expected = "Петра"
+	test.caseName = Accusative
+	examineFirstname(petrovich, test, t)
 
-	actual, err = petrovich.FirstName(firstname, Male, Accusative)
-	examineAnswer("Петра", actual, err, t)
+	test.expected = "Петром"
+	test.caseName = Instrumental
+	examineFirstname(petrovich, test, t)
 
-	actual, err = petrovich.FirstName(firstname, Male, Instrumental)
-	examineAnswer("Петром", actual, err, t)
-
-	actual, err = petrovich.FirstName(firstname, Male, Prepositional)
-	examineAnswer("Петре", actual, err, t)
+	test.expected = "Петре"
+	test.caseName = Prepositional
+	examineFirstname(petrovich, test, t)
 }
 
 func TestDoubleLastname(t *testing.T) {
 	petrovich := LoadFromFile(rulesBytes)
-	lastname := "Салтыков-Щедрин"
+	test := testCase{"Салтыков-Щедрин", "Салтыков-Щедрин", Male, Nominative}
+	examineLastname(petrovich, test, t)
 
-	actual, err := petrovich.LastName(lastname, Male, Nominative)
-	examineAnswer("Салтыков-Щедрин", actual, err, t)
+	test.expected = "Салтыкова-Щедрина"
+	test.caseName = Genitive
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName(lastname, Male, Genitive)
-	examineAnswer("Салтыкова-Щедрина", actual, err, t)
+	test.expected = "Салтыкову-Щедрину"
+	test.caseName = Dative
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName(lastname, Male, Dative)
-	examineAnswer("Салтыкову-Щедрину", actual, err, t)
+	test.expected = "Салтыкова-Щедрина"
+	test.caseName = Accusative
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName(lastname, Male, Accusative)
-	examineAnswer("Салтыкова-Щедрина", actual, err, t)
+	test.expected = "Салтыковым-Щедриным"
+	test.caseName = Instrumental
+	examineLastname(petrovich, test, t)
 
-	actual, err = petrovich.LastName(lastname, Male, Instrumental)
-	examineAnswer("Салтыковым-Щедриным", actual, err, t)
-
-	actual, err = petrovich.LastName(lastname, Male, Prepositional)
-	examineAnswer("Салтыкове-Щедрине", actual, err, t)
+	test.expected = "Салтыкове-Щедрине"
+	test.caseName = Prepositional
+	examineLastname(petrovich, test, t)
 }
 
-func examineAnswer(expected string, actual string, err error, t *testing.T) {
+func examineFirstname(petrovich *Petrovich, test testCase, t *testing.T) {
+	actual, err := petrovich.FirstName(
+		test.original,
+		test.gender,
+		test.caseName)
+	examineAnswer(test, actual, err, t)
+}
+
+func examineLastname(petrovich *Petrovich, test testCase, t *testing.T) {
+	actual, err := petrovich.LastName(
+		test.original,
+		test.gender,
+		test.caseName)
+	examineAnswer(test, actual, err, t)
+}
+
+func examineAnswer(test testCase, actual string, err error, t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if actual != expected {
-		t.Errorf("Wrong answer expected='%s', actual='%s'", expected, actual)
+	if actual != test.expected {
+		t.Errorf("Wrong answer Actual: %s, Test Case: %s", actual, test)
 	}
 }
 

@@ -18,7 +18,7 @@ type testCase struct {
 }
 
 func (t testCase) String() string {
-	return fmt.Sprintf("Original: %s, Expected: %s, Genger: %s, Case: %s;",
+	return fmt.Sprintf("{Original: %s, Expected: %s, Genger: %s, Case: %s}",
 		t.original,
 		t.expected,
 		t.gender,
@@ -34,8 +34,7 @@ func TestFirstnamesFile(t *testing.T) {
 	scanner.Scan()
 	for scanner.Scan() {
 		test := prepareTestCase(scanner.Text())
-		actual, err := petrovich.FirstName(test.original, test.gender, test.caseName)
-		examineAnswer(test.expected, actual, err, t)
+		examineFirstname(petrovich, test, t)
 	}
 }
 

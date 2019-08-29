@@ -75,13 +75,13 @@ func (petrovich Petrovich) MiddleName(middleName string, gender string, caseName
 }
 
 //LoadFromFile load rules from file
-func LoadFromFile(data []byte) Petrovich {
+func LoadFromFile(data []byte) *Petrovich {
 	p := Petrovich{}
 	err := yaml.Unmarshal(data, &p)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
-	return p
+	return &p
 }
 
 func convertTo(name string, gender string, caseName string, ruleGroup *ruleGroup) (string, error) {
