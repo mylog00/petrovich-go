@@ -73,6 +73,7 @@ func TestDoubleLastname(t *testing.T) {
 	actual, err = petrovich.LastName(lastname, Male, Prepositional)
 	examineAnswer("Салтыкове-Щедрине", actual, err, t)
 }
+
 func examineAnswer(expected string, actual string, err error, t *testing.T) {
 	if err != nil {
 		t.Error(err)
@@ -81,6 +82,7 @@ func examineAnswer(expected string, actual string, err error, t *testing.T) {
 		t.Errorf("Wrong answer expected='%s', actual='%s'", expected, actual)
 	}
 }
+
 func readFile(fileName string) []byte {
 	data, _ := ioutil.ReadFile(fileName)
 	return data
