@@ -1,6 +1,3 @@
-[submodule "petrovich-eval"]
-	path = petrovich-eval
-	url = git://github.com/petrovich/petrovich-eval.git
 [submodule "petrovich-rules"]
 	path = petrovich-rules
 	url = git://github.com/petrovich/petrovich-rules.git

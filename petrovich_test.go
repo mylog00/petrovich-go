@@ -1,11 +1,27 @@
 package petrovich
 
 import (
+	"fmt"
 	"io/ioutil"
 	"testing"
 )
 
 var rulesBytes = readFile("petrovich-rules/rules.yml")
+
+type testCase struct {
+	original string
+	expected string
+	gender   string
+	caseName string
+}
+
+func (t testCase) String() string {
+	return fmt.Sprintf("{Original: %s, Expected: %s, Genger: %s, Case: %s}",
+		t.original,
+		t.expected,
+		t.gender,
+		t.caseName)
+}
 
 func TestLastname(t *testing.T) {
 	petrovich := LoadFromFile(rulesBytes)

@@ -60,28 +60,28 @@ func (e ErrPetrovich) Error() string {
 }
 
 // FirstName TODO
-func (petrovich Petrovich) FirstName(firstName string, gender string, caseName string) (string, error) {
+func (petrovich *Petrovich) FirstName(firstName string, gender string, caseName string) (string, error) {
 	return convertTo(firstName, gender, caseName, &petrovich.Firstname)
 }
 
 // LastName TODO
-func (petrovich Petrovich) LastName(lastName string, gender string, caseName string) (string, error) {
+func (petrovich *Petrovich) LastName(lastName string, gender string, caseName string) (string, error) {
 	return convertTo(lastName, gender, caseName, &petrovich.Lastname)
 }
 
 // MiddleName TODO
-func (petrovich Petrovich) MiddleName(middleName string, gender string, caseName string) (string, error) {
+func (petrovich *Petrovich) MiddleName(middleName string, gender string, caseName string) (string, error) {
 	return convertTo(middleName, gender, caseName, &petrovich.Middlename)
 }
 
 //LoadFromFile load rules from file
 func LoadFromFile(data []byte) *Petrovich {
-	p := Petrovich{}
-	err := yaml.Unmarshal(data, &p)
+	p := &Petrovich{}
+	err := yaml.Unmarshal(data, p)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
-	return &p
+	return p
 }
 
 func convertTo(name string, gender string, caseName string, ruleGroup *ruleGroup) (string, error) {
